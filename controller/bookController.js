@@ -1,66 +1,89 @@
-const { response, request } = require('express');
 const { createBook, getListBooks, listBookByIsbn, updateBookById, deleteBookByid, bookPatchById } = require('../service/bookService');
 
-const bookPost = async (req, res = response) => {
+const bookPost = async (req, res) => {
+    try {
+        const body = req.body;
+        const bookInserted = await createBook(body);
 
-    const body = req.body;
-    const bookInserted = await createBook(body);
-
-    res.json({
-        bookInserted
-    });
+        res.json({
+            bookInserted
+        });
+    }
+    catch (error) {
+        throw new Error(error);
+    }
 }
 
-const bookGet = async (req = request, res = response) => {
+const bookGet = async (req, res) => {
+    try {
+        const listBooks = await getListBooks();
 
-    const listBooks = await getListBooks();
-
-    res.json({
-        listBooks
-    });
+        res.json({
+            listBooks
+        });
+    }
+    catch (error) {
+        throw new Error(error);
+    }
 }
 
-const bookGetForIsbn = async (req = request, res = response) => {
+const bookGetForIsbn = async (req, res) => {
+    try {
+        const { isbn } = req.params;
+        const book = await listBookByIsbn(isbn);
 
-    const { isbn } = req.query;
-    const book = await listBookByIsbn(isbn);
-
-    res.json({
-        book
-    });
+        res.json({
+            book
+        });
+    }
+    catch (error) {
+        throw new Error(error);
+    }
 }
 
-const bookPut = async (req, res = response) => {
+const bookPut = async (req, res) => {
+    try {
+        const id = req.params;
+        const body = req.body;
 
-    const id = req.params;
-    const body = req.body;
+        const result = await updateBookById(id, body);
 
-    const result = await updateBookById(id, body);
-
-    res.json({
-        result
-    });
+        res.json({
+            result
+        });
+    }
+    catch (error) {
+        throw new Error(error);
+    }
 }
-const bookPatch = async (req, res = response) => {
+const bookPatch = async (req, res) => {
+    try {
+        const id = req.params;
+        const body = req.body;
 
-    const id = req.params;
-    const body = req.body;
+        const bookPatched = await bookPatchById(id, body);
 
-    const bookPatched = await bookPatchById(id, body);
-
-    res.json({
-        bookPatched
-    });
+        res.json({
+            bookPatched
+        });
+    }
+    catch (error) {
+        throw new Error(error);
+    }
 }
 
-const bookDelete = async (req, res = response) => {
+const bookDelete = async (req, res) => {
+    try {
+        const id = req.params;
+        const book = await deleteBookByid(id);
 
-    const id = req.params;
-    const book = await deleteBookByid(id);
-
-    res.json({
-        book
-    });
+        res.json({
+            book
+        });
+    }
+    catch (error) {
+        throw new Error(error);
+    }
 
 }
 
